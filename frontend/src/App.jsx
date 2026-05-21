@@ -286,7 +286,7 @@ export default function App() {
           </p>
 
           <p className="text-base text-ink-400 mb-10 leading-relaxed font-body max-w-sm">
-            Welcome to my AI Voice Interview Bot. Let's chat about my experiences, projects, and passion for Machine Learning.
+            Welcome to my AI Voice Bot. Let's chat.
           </p>
 
           <motion.button
@@ -301,7 +301,7 @@ export default function App() {
               transition-all duration-300 cursor-pointer
             "
           >
-            Start Interview
+            Start
           </motion.button>
           
           <span className="text-[10px] font-mono text-ink-600 uppercase tracking-wider mt-6">
