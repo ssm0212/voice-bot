@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://your-render-url.onrender.com/$1" }
+    { "source": "/api/(.*)", "destination": "https://voice-bot-sjkg.onrender.com/$1" }
   ]
 }
+
