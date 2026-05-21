@@ -69,6 +69,7 @@ export default function App() {
   ])
   const [status, setStatus] = useState('idle') // idle | listening | loading | speaking | error
   const [error, setError] = useState(null)
+  const [hasStarted, setHasStarted] = useState(false)
   const chatEndRef = useRef(null)
   const isProcessingRef = useRef(false)
   const welcomeSpokenRef = useRef(false)
@@ -76,32 +77,10 @@ export default function App() {
   const { isListening, transcript, isSupported, error: recognitionError, startListening, stopListening } = useSpeechRecognition()
   const { isSpeaking, speak, stopSpeaking } = useSpeechSynthesis()
 
-  // Auto-speak welcome message on first user interaction (bypasses browser autoplay policy)
-  useEffect(() => {
-    const handleVoiceGreeting = () => {
-      if (welcomeSpokenRef.current) return
-      
-      try {
-        speak("Hi! I'm Sharwari, feel free to ask me anything!")
-        welcomeSpokenRef.current = true
-        // Remove event listeners
-        document.removeEventListener('click', handleVoiceGreeting)
-        document.removeEventListener('touchstart', handleVoiceGreeting)
-        document.removeEventListener('keydown', handleVoiceGreeting)
-      } catch (err) {
-        console.warn('Auto-speak greeting failed/blocked:', err)
-      }
-    }
-
-    document.addEventListener('click', handleVoiceGreeting)
-    document.addEventListener('touchstart', handleVoiceGreeting)
-    document.addEventListener('keydown', handleVoiceGreeting)
-
-    return () => {
-      document.removeEventListener('click', handleVoiceGreeting)
-      document.removeEventListener('touchstart', handleVoiceGreeting)
-      document.removeEventListener('keydown', handleVoiceGreeting)
-    }
+  const handleStart = useCallback(() => {
+    setHasStarted(true)
+    speak("Hi! I'm Sharwari, feel free to ask me anything!")
+    welcomeSpokenRef.current = true
   }, [speak])
 
   // Sync status with speech states
@@ -265,6 +244,73 @@ export default function App() {
 
   const isDisabled = status === 'loading'
   const showEmpty = messages.length === 1 && status === 'idle' // showEmpty if only welcome message is present
+
+  if (!hasStarted) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0D0B21] px-6 overflow-hidden">
+        {/* Decorative Glowing Rings */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF5744]/05 rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-[#00F5FF]/05 rounded-full blur-[80px] pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="relative max-w-md w-full text-center flex flex-col items-center z-10"
+        >
+          {/* Glowing Outer Ring */}
+          <div className="relative mb-8">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+              className="absolute -inset-4 rounded-full border border-dashed border-[#FF5744]/20"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+              className="absolute -inset-8 rounded-full border border-dashed border-[#00F5FF]/10"
+            />
+            <div className="relative w-28 h-28 rounded-full flex items-center justify-center bg-gradient-to-br from-[#FF5744]/10 via-[#12102A] to-[#00F5FF]/10 border border-[#FF5744]/20 shadow-[0_0_50px_rgba(255,87,68,0.15)]">
+              {/* Mic Icon */}
+              <svg className="w-12 h-12 text-[#FF5744] animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+            </div>
+          </div>
+
+          <h1 className="font-display text-4xl font-light text-ink-100 mb-2 tracking-wide">
+            Sharwari Muley
+          </h1>
+          <p className="text-sm font-mono text-[#00F5FF] uppercase tracking-widest mb-6">
+            BTech. student, IIT Kharagpur
+          </p>
+
+          <p className="text-base text-ink-400 mb-10 leading-relaxed font-body max-w-sm">
+            Welcome to my AI Voice Interview Bot. Let's chat about my experiences, projects, and passion for Machine Learning.
+          </p>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleStart}
+            className="
+              px-8 py-4 rounded-2xl bg-gradient-to-r from-[#FF5744] to-[#FF7262]
+              text-white font-display text-base font-semibold tracking-wider
+              shadow-[0_0_30px_rgba(255,87,68,0.3)]
+              hover:shadow-[0_0_40px_rgba(255,87,68,0.5)]
+              transition-all duration-300 cursor-pointer
+            "
+          >
+            Start Interview
+          </motion.button>
+          
+          <span className="text-[10px] font-mono text-ink-600 uppercase tracking-wider mt-6">
+            Click to enable voice synthesis
+          </span>
+        </motion.div>
+      </div>
+    )
+  }
 
   return (
     <div className="h-dvh flex flex-col overflow-hidden">
