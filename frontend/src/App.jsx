@@ -76,7 +76,7 @@ export default function App() {
   const { isListening, transcript, isSupported, error: recognitionError, startListening, stopListening } = useSpeechRecognition()
   const { isSpeaking, speak, stopSpeaking } = useSpeechSynthesis()
 
-  // Auto-speak welcome message on first load or user interaction
+  // Auto-speak welcome message on first user interaction (bypasses browser autoplay policy)
   useEffect(() => {
     const handleVoiceGreeting = () => {
       if (welcomeSpokenRef.current) return
@@ -87,22 +87,20 @@ export default function App() {
         // Remove event listeners
         document.removeEventListener('click', handleVoiceGreeting)
         document.removeEventListener('touchstart', handleVoiceGreeting)
+        document.removeEventListener('keydown', handleVoiceGreeting)
       } catch (err) {
         console.warn('Auto-speak greeting failed/blocked:', err)
       }
     }
 
-    const timer = setTimeout(() => {
-      handleVoiceGreeting()
-    }, 800)
-
     document.addEventListener('click', handleVoiceGreeting)
     document.addEventListener('touchstart', handleVoiceGreeting)
+    document.addEventListener('keydown', handleVoiceGreeting)
 
     return () => {
-      clearTimeout(timer)
       document.removeEventListener('click', handleVoiceGreeting)
       document.removeEventListener('touchstart', handleVoiceGreeting)
+      document.removeEventListener('keydown', handleVoiceGreeting)
     }
   }, [speak])
 
@@ -144,6 +142,7 @@ export default function App() {
   const handleSend = useCallback(async (text) => {
     if (!text.trim() || isProcessingRef.current) return
     isProcessingRef.current = true
+    welcomeSpokenRef.current = true
 
     // Stop speaking if AI is mid-sentence
     stopSpeaking()
@@ -183,6 +182,7 @@ export default function App() {
   }, [messages, speak, stopSpeaking])
 
   const handleMicClick = useCallback(() => {
+    welcomeSpokenRef.current = true
     if (isListening) {
       stopListening()
       return
@@ -218,6 +218,7 @@ export default function App() {
   }, [isListening, isSpeaking, status, startListening, stopListening, stopSpeaking, handleSend])
 
   const handleDownloadTranscript = useCallback(() => {
+    welcomeSpokenRef.current = true
     const chatHistory = messages.filter(m => m.id !== 'welcome')
     if (chatHistory.length === 0) return
 
@@ -248,6 +249,7 @@ export default function App() {
   }, [messages])
 
   const handleClear = useCallback(() => {
+    welcomeSpokenRef.current = true
     setMessages([
       {
         id: 'welcome',
