@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.venv/
+env/
+.env
+
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Editor/System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# System Generated / Logs
+.system_generated/
+*.log
