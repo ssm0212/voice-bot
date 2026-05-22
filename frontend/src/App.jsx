@@ -374,32 +374,34 @@ export default function App() {
             />
 
             {/* Responsive Input Control Panel */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
-              <div className="flex-1 flex flex-col sm:flex-row gap-2">
-                <div className="flex-1 flex items-center gap-2">
-                  <div className="flex-1">
-                    <TextInput onSubmit={handleSend} disabled={isDisabled} />
-                  </div>
-                  {/* On mobile, MicButton is placed next to TextInput */}
-                  <div className="sm:hidden flex-shrink-0">
-                    <MicButton
-                      isListening={isListening}
-                      isSpeaking={isSpeaking}
-                      isLoading={status === 'loading'}
-                      onClick={handleMicClick}
-                      disabled={isDisabled && !isListening && !isSpeaking}
-                    />
-                  </div>
+            <div className="w-full">
+              {/* Mobile View Layout: Sits on 2 or 3 stacked rows to give full width to input and center the mic */}
+              <div className="sm:hidden flex flex-col gap-2 w-full">
+                {/* Mobile Row 1: TextInput (takes full width) */}
+                <div className="w-full">
+                  <TextInput onSubmit={handleSend} disabled={isDisabled} />
                 </div>
 
+                {/* Mobile Row 2: MicButton centered (prevents overflow and gives space for glowing rings) */}
+                <div className="flex justify-center py-1">
+                  <MicButton
+                    isListening={isListening}
+                    isSpeaking={isSpeaking}
+                    isLoading={status === 'loading'}
+                    onClick={handleMicClick}
+                    disabled={isDisabled && !isListening && !isSpeaking}
+                  />
+                </div>
+
+                {/* Mobile Row 3: Download & Clear buttons (side-by-side) */}
                 {messages.length > 1 && (
-                  <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                  <div className="grid grid-cols-2 gap-2 w-full">
                     <motion.button
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       onClick={handleDownloadTranscript}
                       className="
-                        px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20
+                        px-3 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20
                         text-cyan-400 text-xs font-mono uppercase tracking-wider
                         hover:bg-cyan-500/20 hover:border-cyan-500/30
                         transition-all duration-200 cursor-pointer
@@ -413,7 +415,7 @@ export default function App() {
                       animate={{ opacity: 1, scale: 1 }}
                       onClick={handleClear}
                       className="
-                        px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-red-500/10 border border-red-500/20
+                        px-3 py-2 rounded-xl bg-red-500/10 border border-red-500/20
                         text-red-400 text-xs font-mono uppercase tracking-wider
                         hover:bg-red-500/20 hover:border-red-500/30
                         transition-all duration-200 cursor-pointer
@@ -426,15 +428,54 @@ export default function App() {
                 )}
               </div>
 
-              {/* On desktop, MicButton is placed at the right end of the control row */}
-              <div className="hidden sm:block flex-shrink-0">
-                <MicButton
-                  isListening={isListening}
-                  isSpeaking={isSpeaking}
-                  isLoading={status === 'loading'}
-                  onClick={handleMicClick}
-                  disabled={isDisabled && !isListening && !isSpeaking}
-                />
+              {/* Desktop View Layout: Single horizontal row (hidden on mobile) */}
+              <div className="hidden sm:flex items-center gap-4 w-full">
+                <div className="flex-1 flex gap-2">
+                  <div className="flex-1">
+                    <TextInput onSubmit={handleSend} disabled={isDisabled} />
+                  </div>
+                  {messages.length > 1 && (
+                    <>
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={handleDownloadTranscript}
+                        className="
+                          px-4 py-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20
+                          text-cyan-400 text-xs font-mono uppercase tracking-wider
+                          hover:bg-cyan-500/20 hover:border-cyan-500/30
+                          transition-all duration-200 cursor-pointer
+                          flex items-center justify-center whitespace-nowrap
+                        "
+                      >
+                        Download Transcript
+                      </motion.button>
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        onClick={handleClear}
+                        className="
+                          px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20
+                          text-red-400 text-xs font-mono uppercase tracking-wider
+                          hover:bg-red-500/20 hover:border-red-500/30
+                          transition-all duration-200 cursor-pointer
+                          flex items-center justify-center whitespace-nowrap
+                        "
+                      >
+                        Clear Chat
+                      </motion.button>
+                    </>
+                  )}
+                </div>
+                <div className="flex-shrink-0">
+                  <MicButton
+                    isListening={isListening}
+                    isSpeaking={isSpeaking}
+                    isLoading={status === 'loading'}
+                    onClick={handleMicClick}
+                    disabled={isDisabled && !isListening && !isSpeaking}
+                  />
+                </div>
               </div>
             </div>
 
