@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const QUESTIONS = [
-  { text: 'Tell me about yourself', icon: '✦' },
+  { text: 'Tell me about your lifestory in few sentences', icon: '✦' },
   { text: "What's your biggest strength?", icon: '◈' },
   { text: 'What is your biggest weakness?', icon: '◎' },
   { text: 'What are your 3 weaknesses?', icon: '◉' },
