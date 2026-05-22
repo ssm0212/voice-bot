@@ -184,4 +184,4 @@ Edit the `SYSTEM_PROMPT` in `backend/main.py` to change the persona. Adjust:
 
 ---
 
-Built with ❤️ for Sharwari Muley · IIT Kharagpur · Class of 2026
+
