@@ -35,7 +35,8 @@ export function useSpeechSynthesis() {
 
       if (female) utterance.voice = female
 
-      utterance.rate = 1.25
+      const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+      utterance.rate = isMobile ? 1.20 : 1.25
       utterance.pitch = 1.1
       utterance.volume = 1
 
