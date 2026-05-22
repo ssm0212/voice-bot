@@ -11,12 +11,12 @@ export function AudioVisualizer({ status }) {
 
     const ctx = canvas.getContext('2d')
     let width = (canvas.width = canvas.parentElement.clientWidth || 400)
-    let height = (canvas.height = 40)
+    let height = (canvas.height = canvas.parentElement.clientHeight || 40)
 
     const handleResize = () => {
       if (canvas && canvas.parentElement) {
         width = canvas.width = canvas.parentElement.clientWidth
-        height = canvas.height = 40
+        height = canvas.height = canvas.parentElement.clientHeight
       }
     }
     window.addEventListener('resize', handleResize)
@@ -32,7 +32,7 @@ export function AudioVisualizer({ status }) {
       let colorGradient = null
 
       if (status === 'listening') {
-        targetAmplitude = 12
+        targetAmplitude = height * 0.3 // adapt amplitude to canvas height
         targetSpeed = 0.08
         // Electric Cyan/Teal gradient
         colorGradient = ctx.createLinearGradient(0, 0, width, 0)
@@ -40,7 +40,7 @@ export function AudioVisualizer({ status }) {
         colorGradient.addColorStop(0.5, 'rgba(0, 245, 255, 0.8)')
         colorGradient.addColorStop(1, 'rgba(0, 245, 255, 0.05)')
       } else if (status === 'speaking') {
-        targetAmplitude = 15
+        targetAmplitude = height * 0.38 // adapt amplitude to canvas height
         targetSpeed = 0.12
         // Sunset Coral/Gold gradient
         colorGradient = ctx.createLinearGradient(0, 0, width, 0)
@@ -48,7 +48,7 @@ export function AudioVisualizer({ status }) {
         colorGradient.addColorStop(0.5, 'rgba(255, 87, 68, 0.8)')
         colorGradient.addColorStop(1, 'rgba(255, 87, 68, 0.05)')
       } else if (status === 'loading') {
-        targetAmplitude = 5
+        targetAmplitude = height * 0.12 // adapt amplitude to canvas height
         targetSpeed = 0.04
         // Mild Teal/Cyan gradient
         colorGradient = ctx.createLinearGradient(0, 0, width, 0)
@@ -56,7 +56,7 @@ export function AudioVisualizer({ status }) {
         colorGradient.addColorStop(0.5, 'rgba(0, 245, 255, 0.4)')
         colorGradient.addColorStop(1, 'rgba(0, 245, 255, 0.02)')
       } else if (status === 'error') {
-        targetAmplitude = 8
+        targetAmplitude = height * 0.2 // adapt amplitude to canvas height
         targetSpeed = 0.15
         // Red error gradient
         colorGradient = ctx.createLinearGradient(0, 0, width, 0)
@@ -118,7 +118,7 @@ export function AudioVisualizer({ status }) {
   }, [status])
 
   return (
-    <div className="w-full h-10 flex items-center justify-center overflow-hidden relative">
+    <div className="w-full h-5 sm:h-10 flex items-center justify-center overflow-hidden relative">
       <canvas ref={canvasRef} className="w-full h-full block" />
     </div>
   )

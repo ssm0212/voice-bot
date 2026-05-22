@@ -32,7 +32,7 @@ export function StatusBar({ status, transcript, error }) {
   const config = configs[status]
 
   return (
-    <div className="h-10 flex items-center justify-center">
+    <div className={`flex items-center justify-center transition-all duration-300 ${config ? 'h-7 sm:h-10' : 'h-0 overflow-hidden'}`}>
       <AnimatePresence mode="wait">
         {config && (
           <motion.div

@@ -19,13 +19,12 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
             {[1, 2, 3].map((i) => (
               <motion.div
                 key={i}
-                className={`absolute rounded-full border ${
+                className={`absolute inset-0 rounded-full border ${
                   isListening ? 'border-gold-400/20' : 'border-sage-400/20'
                 }`}
-                initial={{ width: 80, height: 80, opacity: 0.6 }}
+                initial={{ scale: 1, opacity: 0.6 }}
                 animate={{
-                  width: 80 + i * 35,
-                  height: 80 + i * 35,
+                  scale: 1 + i * 0.35,
                   opacity: 0,
                 }}
                 transition={{
@@ -47,7 +46,7 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
         whileHover={{ scale: disabled || isLoading ? 1 : 1.05 }}
         whileTap={{ scale: disabled || isLoading ? 1 : 0.95 }}
         className={`
-          relative w-20 h-20 rounded-full flex items-center justify-center
+          relative w-14 h-14 sm:w-20 sm:h-20 rounded-full flex items-center justify-center
           transition-all duration-500 cursor-pointer select-none
           disabled:cursor-not-allowed disabled:opacity-50
           ${state === 'listening' ? 'mic-glow-active bg-gold-500/20 border border-gold-400/40' : ''}
@@ -70,7 +69,7 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
               {[0, 1, 2].map(i => (
                 <div
                   key={i}
-                  className="w-1.5 h-1.5 rounded-full bg-ink-300 typing-dot"
+                  className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-ink-300 typing-dot"
                   style={{ animationDelay: `${i * 0.2}s` }}
                 />
               ))}
@@ -83,14 +82,14 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="flex items-end gap-0.5 h-7"
+              className="flex items-end gap-0.5 h-5 sm:h-7"
             >
               {[0.7, 1, 0.6, 0.9, 0.5].map((h, i) => (
                 <div
                   key={i}
-                  className="soundbar w-1 rounded-full bg-gold-400"
+                  className="soundbar w-0.5 sm:w-1 rounded-full bg-gold-400"
                   style={{
-                    height: `${h * 28}px`,
+                    height: `${h * 100}%`,
                     animationDelay: `${i * 0.1}s`,
                   }}
                 />
@@ -104,14 +103,14 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="flex items-end gap-0.5 h-7"
+              className="flex items-end gap-0.5 h-5 sm:h-7"
             >
               {[0.5, 0.9, 1, 0.7, 0.6].map((h, i) => (
                 <div
                   key={i}
-                  className="soundbar w-1 rounded-full bg-sage-400"
+                  className="soundbar w-0.5 sm:w-1 rounded-full bg-sage-400"
                   style={{
-                    height: `${h * 28}px`,
+                    height: `${h * 100}%`,
                     animationDelay: `${i * 0.12}s`,
                   }}
                 />
@@ -125,8 +124,9 @@ export function MicButton({ isListening, isSpeaking, isLoading, onClick, disable
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
+              className="flex items-center justify-center"
             >
-              <svg className="text-gold-400" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg className="text-gold-400 w-6 h-6 sm:w-7 sm:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="9" y="2" width="6" height="12" rx="3" fill="currentColor" />
                 <path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 <line x1="12" y1="17" x2="12" y2="22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />

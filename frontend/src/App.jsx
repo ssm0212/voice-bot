@@ -358,7 +358,7 @@ export default function App() {
 
         {/* Bottom control panel */}
         <div className="border-t border-gold-400/06 glass">
-          <div className="max-w-2xl mx-auto px-4 py-4 flex flex-col gap-3">
+          <div className="max-w-2xl mx-auto px-3 py-2 sm:px-4 sm:py-4 flex flex-col gap-1.5 sm:gap-3">
 
             {/* Suggested questions — always visible */}
             <SuggestedQuestions onSelect={handleSend} disabled={isDisabled} />
@@ -373,20 +373,33 @@ export default function App() {
               error={error}
             />
 
-            {/* Center mic + text input row */}
-            <div className="flex flex-col-reverse sm:flex-row items-center gap-4">
-              <div className="w-full sm:flex-1 flex flex-col sm:flex-row gap-2">
-                <div className="flex-1">
-                  <TextInput onSubmit={handleSend} disabled={isDisabled} />
+            {/* Responsive Input Control Panel */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-4">
+              <div className="flex-1 flex flex-col sm:flex-row gap-2">
+                <div className="flex-1 flex items-center gap-2">
+                  <div className="flex-1">
+                    <TextInput onSubmit={handleSend} disabled={isDisabled} />
+                  </div>
+                  {/* On mobile, MicButton is placed next to TextInput */}
+                  <div className="sm:hidden flex-shrink-0">
+                    <MicButton
+                      isListening={isListening}
+                      isSpeaking={isSpeaking}
+                      isLoading={status === 'loading'}
+                      onClick={handleMicClick}
+                      disabled={isDisabled && !isListening && !isSpeaking}
+                    />
+                  </div>
                 </div>
+
                 {messages.length > 1 && (
-                  <>
+                  <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
                     <motion.button
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       onClick={handleDownloadTranscript}
                       className="
-                        w-full sm:w-auto px-4 py-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20
+                        px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-cyan-500/10 border border-cyan-500/20
                         text-cyan-400 text-xs font-mono uppercase tracking-wider
                         hover:bg-cyan-500/20 hover:border-cyan-500/30
                         transition-all duration-200 cursor-pointer
@@ -400,7 +413,7 @@ export default function App() {
                       animate={{ opacity: 1, scale: 1 }}
                       onClick={handleClear}
                       className="
-                        w-full sm:w-auto px-4 py-2.5 rounded-xl bg-red-500/10 border border-red-500/20
+                        px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-red-500/10 border border-red-500/20
                         text-red-400 text-xs font-mono uppercase tracking-wider
                         hover:bg-red-500/20 hover:border-red-500/30
                         transition-all duration-200 cursor-pointer
@@ -409,31 +422,35 @@ export default function App() {
                     >
                       Clear Chat
                     </motion.button>
-                  </>
+                  </div>
                 )}
               </div>
-              <MicButton
-                isListening={isListening}
-                isSpeaking={isSpeaking}
-                isLoading={status === 'loading'}
-                onClick={handleMicClick}
-                disabled={isDisabled && !isListening && !isSpeaking}
-              />
+
+              {/* On desktop, MicButton is placed at the right end of the control row */}
+              <div className="hidden sm:block flex-shrink-0">
+                <MicButton
+                  isListening={isListening}
+                  isSpeaking={isSpeaking}
+                  isLoading={status === 'loading'}
+                  onClick={handleMicClick}
+                  disabled={isDisabled && !isListening && !isSpeaking}
+                />
+              </div>
             </div>
 
             {/* Mic instructions hint */}
             {isSupported ? (
-              <p className="text-[11px] text-ink-400 text-center font-mono animate-pulse">
+              <p className="hidden sm:block text-[11px] text-ink-400 text-center font-mono animate-pulse">
                 Click the microphone icon to talk, or type your question below.
               </p>
             ) : (
-              <p className="text-[11px] text-ink-500 text-center font-mono">
+              <p className="hidden sm:block text-[11px] text-ink-500 text-center font-mono">
                 Voice input not supported in this browser. Try Chrome or Edge.
               </p>
             )}
 
             {/* Credit */}
-            <p className="text-center text-[10px] text-ink-700 font-mono">
+            <p className="hidden sm:block text-center text-[10px] text-ink-700 font-mono">
               AI Interview Bot · Built with Gemini · IIT Kharagpur
             </p>
           </div>
