@@ -15,14 +15,18 @@ export function useSpeechSynthesis() {
 
       const voices = window.speechSynthesis.getVoices()
 
-      // Priority order — Prioritize Indian English voices (Approach A)
-      const female = voices.find(v => v.name.includes('Google India'))
+      // Priority order — Prioritize smooth Indian English voices (including Microsoft Natural Online voices)
+      const female = voices.find(v => v.name.toLowerCase().includes('natural') && (v.lang === 'en-IN' || v.lang.startsWith('en_IN') || v.name.toLowerCase().includes('india')))
+        || voices.find(v => v.name.toLowerCase().includes('neerja'))
+        || voices.find(v => v.name.toLowerCase().includes('raveena'))
+        || voices.find(v => v.name.includes('Google India'))
         || voices.find(v => v.name === 'Microsoft Heera - English (India)')
         || voices.find(v => v.name.includes('Microsoft Heera'))
         || voices.find(v => v.lang === 'en-IN')
         || voices.find(v => v.lang.startsWith('en_IN'))
         || voices.find(v => v.name.toLowerCase().includes('india') && v.lang.startsWith('en'))
-        // Fallbacks
+        // Smooth fallbacks (English Natural voices)
+        || voices.find(v => v.name.toLowerCase().includes('natural') && v.lang.startsWith('en'))
         || voices.find(v => v.name === 'Google UK English Female')
         || voices.find(v => v.name === 'Microsoft Zira - English (United States)')
         || voices.find(v => v.name.includes('Samantha'))
@@ -31,8 +35,8 @@ export function useSpeechSynthesis() {
 
       if (female) utterance.voice = female
 
-      utterance.rate = 1.15
-      utterance.pitch = 1.2
+      utterance.rate = 1.25
+      utterance.pitch = 1.1
       utterance.volume = 1
 
       utterance.onstart = () => setIsSpeaking(true)
